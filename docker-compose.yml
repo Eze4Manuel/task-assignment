@@ -1,0 +1,42 @@
+version: '3.4'
+
+services:
+  nginx:
+      depends_on:
+        - backend
+        - frontend
+      restart: always
+      build:
+        context: ./nginx
+        dockerfile: Dockerfile.dev
+      ports:
+        - "3050:80"
+
+  backend:
+    image: backend-nodejs
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    environment:
+      NODE_ENV: development
+    ports:
+      - 5001:5001
+    volumes:
+      - /app/node_modules
+      - ./server:/app
+    
+  frontend:
+    image: frontend-react
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    environment:
+      NODE_ENV: development
+    ports:
+      - 3000:3000
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+
+volumes:
+  data:

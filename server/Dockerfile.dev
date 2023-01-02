@@ -1,0 +1,9 @@
+# Backend container
+FROM node:lts-alpine as backend
+WORKDIR /app
+COPY ./package*.json ./
+RUN npm i
+COPY . .
+EXPOSE 5001
+RUN chown -R node /app
+CMD ["npm", "run", "dev"]
